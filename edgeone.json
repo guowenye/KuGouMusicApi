@@ -1,6 +1,7 @@
 {
   "build": {
-    "command": "npm install",
+    "installCommand": "pnpm install",
+    "command": "",
     "output": "public"
   }
 }
