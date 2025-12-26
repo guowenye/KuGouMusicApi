@@ -1,16 +1,6 @@
-/**
- * 酷狗音乐 API - EdgeOne Pages Node Functions 入口
- */
-import path from 'path';
-import fs from 'fs';
-import express from 'express';
-import { fileURLToPath } from 'url';
-import { createRequire } from 'module';
-
-const require = createRequire(import.meta.url);
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
+const path = require('path');
+const fs = require('fs');
+const express = require('express');
 const { cookieToJson } = require('../util/util');
 const { createRequest } = require('../util/request');
 
@@ -116,6 +106,8 @@ async function createApp() {
   return app;
 }
 
-// 创建并导出 Express 实例
-const expressApp = await createApp();
-export default expressApp;
+// 导出处理函数
+module.exports = async (req, res) => {
+  const expressApp = await createApp();
+  return expressApp(req, res);
+};
