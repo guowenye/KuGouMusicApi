@@ -1,10 +1,10 @@
 {
-  "build": {
-    "installCommand": "pnpm install",
-    "command": "",
-    "output": "public"
-  },
-  "functions": {
-    "directory": "node-functions"
+  "installCommand": "pnpm install",
+  "node-functions": {
+    "included_files": [
+      "module/**",
+      "util/**",
+      "public/**"
+    ]
   }
 }

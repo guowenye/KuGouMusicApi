@@ -1,9 +1,26 @@
-const path = require('path');
-const fs = require('fs');
-const express = require('express');
-const decode = require('safe-decode-uri-component');
+/**
+ * 酷狗音乐 API - EdgeOne Pages Node Functions 入口
+ */
+import path from 'path';
+import fs from 'fs';
+import express from 'express';
+import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const { cookieToJson } = require('../util/util');
 const { createRequest } = require('../util/request');
+
+function decode(str) {
+  try {
+    return decodeURIComponent(str);
+  } catch {
+    return str;
+  }
+}
 
 let app = null;
 
@@ -85,10 +102,20 @@ async function createApp() {
     });
   }
 
+  // 首页
+  app.get('/', async (req, res) => {
+    const moduleDefinitions = await getModulesDefinitions(path.join(__dirname, '../module'));
+    res.json({
+      name: '酷狗音乐 API',
+      version: '1.0.0',
+      apis: moduleDefinitions.map(m => m.route).sort(),
+      total: moduleDefinitions.length,
+    });
+  });
+
   return app;
 }
 
-module.exports = async (req, res) => {
-  const expressApp = await createApp();
-  return expressApp(req, res);
-};
+// 创建并导出 Express 实例
+const expressApp = await createApp();
+export default expressApp;
